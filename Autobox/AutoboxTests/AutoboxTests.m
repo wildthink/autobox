@@ -7,20 +7,15 @@
 //
 
 #import <XCTest/XCTest.h>
-
-#define overload __attribute__((overloadable))
+#import "Autobox.h"
 
 typedef enum : unsigned char { Red, Green, Blue } Color;
 
-id static inline foo () {
+overload id autobox (Color color) {
     return nil;
 }
 
-overload id box (Color color) {
-    return nil;
-}
-
-overload id box (unsigned char color) {
+overload id autobox (unsigned char color) {
     return nil;
 }
 
@@ -46,27 +41,28 @@ overload id box (unsigned char color) {
 - (void)setUp
 {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
 }
 
 - (void)tearDown
 {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
 
-- (void)testExample
+- (void)testNumbers
 {
-//    id foo; = Nil;
-//    id bar = @(nil);
-    const char *str = @encode(typeof (Red));
-    [self log:@"Enum is %s", str];
-    
+    XCTAssertEqualObjects(@(10), $(10), @"Not equal");
+    XCTAssertEqualObjects(@(10U), $(10U), @"Not equal");
+    XCTAssertEqualObjects(@(10L), $(10L), @"Not equal");
+    XCTAssertEqualObjects(@(10.10), $(10.10), @"Not equal");
+}
+
+- (void)testEnums
+{
     Color color = Red;
-    id foo = box(color);
+    id foo = autobox(color);
     [self log:@"Color is %@", foo];
 
-    id bar = box ((unsigned char)color);
+    id bar = autobox ((unsigned char)color);
     [self log:@"Color is %@", bar];
 }
 

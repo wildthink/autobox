@@ -66,8 +66,32 @@ static Autobox *_sharedAutobox;
     return (value ? value : [NSNull null]);
 }
 
-- valueWithInt:(NSInteger)value {
+- valueWithInt:(int)value {
+    return [NSNumber numberWithInt:value];
+}
+
+- valueWithUnsignedInt:(unsigned int)value {
+    return [NSNumber numberWithUnsignedInt:value];
+}
+
+- valueWithInteger:(NSInteger)value {
     return [NSNumber numberWithInteger:value];
+}
+
+- valueWithLong:(long)value {
+    return [NSNumber numberWithLong:value];
+}
+
+- valueWithLongLong:(long long)value {
+    return [NSNumber numberWithLongLong:value];
+}
+
+- valueWithFloat:(float)value {
+    return [NSNumber numberWithFloat:value];
+}
+
+- valueWithDouble:(double)value {
+    return [NSNumber numberWithDouble:value];
 }
 
 @end
