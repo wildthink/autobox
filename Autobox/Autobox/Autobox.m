@@ -8,42 +8,23 @@
 
 #import "Autobox.h"
 
-/*
- void main(int argc, const char *argv[]) {
- // character literals.
- NSNumber *theLetterZ = @'Z';          // equivalent to [NSNumber numberWithChar:'Z']
- 
- // integral literals.
- NSNumber *fortyTwo = @42;             // equivalent to [NSNumber numberWithInt:42]
- NSNumber *fortyTwoUnsigned = @42U;    // equivalent to [NSNumber numberWithUnsignedInt:42U]
- NSNumber *fortyTwoLong = @42L;        // equivalent to [NSNumber numberWithLong:42L]
- NSNumber *fortyTwoLongLong = @42LL;   // equivalent to [NSNumber numberWithLongLong:42LL]
- 
- // floating point literals.
- NSNumber *piFloat = @3.141592654F;    // equivalent to [NSNumber numberWithFloat:3.141592654F]
- NSNumber *piDouble = @3.1415926535;   // equivalent to [NSNumber numberWithDouble:3.1415926535]
- 
- // BOOL literals.
- NSNumber *yesNumber = @YES;           // equivalent to [NSNumber numberWithBool:YES]
- NSNumber *noNumber = @NO;             // equivalent to [NSNumber numberWithBool:NO]
- 
- #ifdef __cplusplus
- NSNumber *trueNumber = @true;         // equivalent to [NSNumber numberWithBool:(BOOL)true]
- NSNumber *falseNumber = @false;       // equivalent to [NSNumber numberWithBool:(BOOL)false]
- #endif
- }
- */
+
+static Autobox *_sharedAutobox;
 
 @implementation Autobox
 
-static Autobox *_sharedAutobox;
 
 + (instancetype)sharedInstance;
 {
     if (_sharedAutobox == nil) {
-        _sharedAutobox = [[self class] init];
+        _sharedAutobox = [[[self class] alloc  ]init];
     }
     return _sharedAutobox;
+}
+
+- init {
+    self = [super init];
+    return self;
 }
 
 - valueWithRect:(NSRect)value {
