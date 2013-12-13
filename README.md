@@ -5,11 +5,9 @@
 Some Rights Reserved - 2013, WildThink, LLC, Jason Jobe
 
 ### Overview
-Dustin Bachrach has [contributed](https://github.com/dbachrach/OCUDL) a really cool solution for User Defined Literals for Objective-C and inspired me to have a go at a related mechanism, namely autoboxing.
+The term "autoboxing" refers to a common syntax for constructing an object from a given literal or expression.  In the case of this library, autoboxing refers to coercing non-object types into Objective-C objects.
 
-Boxing is a mechanism to coerce values into Objective-C objects that can be applied to symbols as well as literals. The term "autoboxing" is used to refer to a common syntax which creates an appropriate object for a given literal or expression.
-
-### Objective-C Boxed Expressions
+### Standard Objective-C Boxed Expressions
 Objective-C supports a "boxing" of not only C literals but also of expressions;
 
 see
@@ -26,29 +24,29 @@ see
 	NSString *str = @(cstr);
 	NSString *another_str = @("Hello World");
 
-But annoyingly, autoboxing an `id`, `nil`, or other ObjC instance results in a compile time error ("Illegal type 'id' used in box expression"). It only works on basic literals and is not extensible.
+Unforuntatly, autoboxing an `id`, `nil`, or other ObjC instance results in a compile time error ("Illegal type 'id' used in box expression"). This is because the builtin autoboxing only functions on basic literals.
 
-In short, the standard system falls short on a number of points.
+In short, the standard system is deficient in several areas.
 
-* You can't box Objective C objects - trying to do so is a compile time error.
+* You can't box Objective-C objects - trying to do so is a compile time error.
 * nil and Nil are equally unacceptable to @(…).
-* Structures are not supported
+* Structures are not supported.
 * It isn't user extensible.
 
 
 ### Autoboxing - new and improved
-So what can we do? We wish we could do this.
+What is desired is something akin to the following:
 
 	NSRect rect = NSZeroRect;
 	NSValue *value = @(rect);  // [NSValue valueWithRect:rect]
 	id boxedNil = @(nil);		// [NSNull null]
 	id anObject = @(value);		// value unaltered
 
-Sadly this sort of thing isn't supported.
+Sadly this behaviour isn't supported.
 
-But there is a way.
+Fortunatly, there is a way.
 
-One of the interesting features of the LLVM clang is its support of overloading of functions with a compiler attribute (but without requiring C++). With it we can provide multiple autoboxing functions relying on the compiler overload resolution to dispatch the call the desired one.
+One of the interesting features of LLVM clang is its support for overloading functions with a compiler attribute (but without requiring C++). With it we can provide multiple autoboxing functions relying on the compilers overload resolution to dispatch the call correctly.
 
 	#define overload __attribute__((overloadable))
 	
@@ -65,7 +63,7 @@ One of the interesting features of the LLVM clang is its support of overloading 
 	id boxedNil = autobox(nil);
 	id anObject = autobox(value);
 
-We can add in the $(…) and overload macro to make it succinct syntax. And provide our own Autobox Class to give us a hook into the construction of said objects are we are off and running. This just works with typedefs (like enums) as we would expect.
+The $(…) and overload macro are supplied to make the syntax more succinct.  Internally, they help provide the Autobox Class a way to generate hooks into the construction of said objects.
 	
 	#define $(...) autobox(__VA_ARGS__)
 	#define overload __attribute__((overloadable))
@@ -92,7 +90,7 @@ We can add in the $(…) and overload macro to make it succinct syntax. And prov
 	id anObject = $(value);
 
 
-By using the variadic macro form we can even add optional annotations if we like. For example we could easily introduce units in this way.
+By using the variadic macro form we can additionally add optional annotations. For example, we could easily introduce units in this way.
 
 	typedef enum : unsigned char { feet, inch, meter, centimeter } SIUnit;
 
@@ -113,9 +111,9 @@ By using the variadic macro form we can even add optional annotations if we like
 ### Kudos
 A nod to some (of many) that contribute to the community and have inspired work herein.
 
-Thanks to [Henry Stratmann](https://github.com/zippers) for encouraging me to clean this up and get it out.
+Thanks to [Henry Stratmann](https://github.com/zippers) for encouraging me to refactor and release this library to the community.
 
-[OCUDL In Depth](http://www.dbachrach.com/posts/ocudl-in-depth/) by Dustin Bachrach
+[OCUDL In Depth](http://www.dbachrach.com/posts/ocudl-in-depth/) by Dustin Bachrach.  His work on [User Defined Literals for Objective-C](https://github.com/dbachrach/OCUDL) inspired me to develop this library. 
 
 [Justin Spahr-Summers - libextobjc](https://github.com/jspahrsummers/libextobjc)
 
