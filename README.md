@@ -9,6 +9,8 @@ Dustin Bachrach has [contributed](https://github.com/dbachrach/OCUDL) a really c
 
 Boxing is a mechanism to coerce values into Objective-C objects that can be applied to symbols as well as literals. The term "autoboxing" is used to refer to a common syntax which creates an appropriate object for a given literal or expression.
 
+The aim of this framework is to provide a simple box syntax and make it extensible both in both boxing logic as well as the data types which can be boxed. Autoboxing makes it easy to wrap literal values with your own classes and expands to include virtually an C/Objective-C literal including enums and structures as well as expressions.
+
 ### Objective-C Boxed Expressions
 Objective-C supports a "boxing" of not only C literals but also of expressions;
 
